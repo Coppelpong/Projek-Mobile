@@ -1,0 +1,149 @@
+/* ========== GLOBAL STYLE ========== */
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f7fb;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ========== AUTH FORM (LOGIN & REGISTER) ========== */
+.login-container, .register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1b6ca8, #69b7eb);
+  color: white;
+  padding: 20px;
+}
+
+.login-container h2, .register-container h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+form {
+  background: white;
+  color: #333;
+  padding: 35px 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 380px;
+}
+
+form input {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+form input:focus {
+  border-color: #1b6ca8;
+  box-shadow: 0 0 5px rgba(27,108,168,0.4);
+}
+
+form button {
+  padding: 12px;
+  background-color: #1b6ca8;
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+form button:hover {
+  background-color: #14527f;
+}
+
+p {
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+p a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* ========== DASHBOARD ========== */
+.navbar {
+  background-color: #1b6ca8;
+  padding: 15px 30px;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard {
+  padding: 30px;
+}
+
+.dashboard h1 {
+  font-size: 26px;
+  color: #1b6ca8;
+  margin-bottom: 10px;
+}
+
+.logout-btn {
+  background-color: #f44336;
+  border: none;
+  padding: 10px 15px;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* ========== CARD & CHART STYLE ========== */
+.device-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: 0.3s ease;
+}
+
+.device-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.chart-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-top: 20px;
+}

@@ -1,0 +1,78 @@
+users (collection)
+│
+├─ _id: ObjectId
+├─ name: string
+├─ email: string (unique)
+├─ password: string (hashed)
+└─ created_at: datetime
+
+devices (collection)
+│
+├─ _id: ObjectId
+├─ user_id: ObjectId (ref users)
+├─ name: string
+├─ mac: string (optional)
+├─ location: string
+├─ tareWeightKg: float
+├─ maxCapacityKg: float
+├─ lowThresholdPercent: float
+├─ created_at: datetime
+└─ lastReading: object (optional cache)
+
+readings (collection)
+│
+├─ _id: ObjectId
+├─ device_id: ObjectId (ref devices)
+├─ timestamp: datetime
+├─ weightKg: float
+├─ percent: float
+├─ estimatedGasUsedKg: float
+└─ created_at: datetime
+
+analytics (collection, opsional)
+│
+├─ _id: ObjectId
+├─ device_id: ObjectId (ref devices)
+├─ period: string ('daily', 'weekly', 'monthly')
+├─ averageUsageKg: float
+├─ start_date: date
+├─ end_date: date
+└─ created_at: datetime
+
+relation:
+
+users → devices (1:N)
+
+devices → readings (1:N)
+
+devices → analytics (1:N, optional)
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE,
+  password VARCHAR(255),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE devices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  name VARCHAR(100),
+  location VARCHAR(100),
+  tare_weight FLOAT,
+  max_capacity FLOAT,
+  low_threshold FLOAT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE readings (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  device_id INT,
+  timestamp DATETIME,
+  weight_kg FLOAT,
+  percent FLOAT,
+  estimated_used FLOAT,
+  FOREIGN KEY (device_id) REFERENCES devices(id)
+);
