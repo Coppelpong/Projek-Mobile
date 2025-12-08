@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 export default function Login() {
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -10,7 +12,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -19,53 +21,15 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ Simpan token di localStorage
-        localStorage.setItem("token", data.access_token);
-
-        alert("✅ Login berhasil!");
-        window.location.href = "/dashboard"; // redirect ke dashboard
+        localStorage.setItem("token", data.token);
+        alert("Login berhasil!");
+        window.location.href = "/dashboard";
       } else {
-        alert(`❌ Login gagal: ${data.detail || "Terjadi kesalahan."}`);
+        alert(data.detail || "Login gagal");
       }
     } catch (err) {
-      console.error("Error saat login:", err);
-      alert("⚠️ Tidak bisa terhubung ke server backend.");
+      alert("Tidak bisa terhubung ke backend");
     } finally {
       setLoading(false);
     }
   };
-
-  return (
-    <div className="login-container">
-      <h2>Masuk ke Akun LPG Monitor</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <input
-          type="password"
-          placeholder="Kata sandi"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Memproses..." : "Login"}
-        </button>
-      </form>
-
-      <p>
-        Belum punya akun?{" "}
-        <a href="/register" style={{ color: "#0047b3", fontWeight: "600" }}>
-          Daftar di sini
-        </a>
-      </p>
-    </div>
-  );
-}
