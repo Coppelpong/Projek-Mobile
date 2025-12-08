@@ -1,14 +1,19 @@
 import jwt
+import os
 from datetime import datetime, timedelta
 
-SECRET_KEY = "supersecretkey123"
+SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
+
+if not SECRET_KEY:
+    raise ValueError("JWT_SECRET environment variable is missing!")
 
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(hours=2)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
 
 def decode_access_token(token: str):
     try:
