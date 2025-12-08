@@ -1,4 +1,4 @@
-import jwt
+from jose import jwt
 import os
 from datetime import datetime, timedelta
 
@@ -15,5 +15,5 @@ def decode_access_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except jwt.PyJWTError:
+    except Exception:
         return None
