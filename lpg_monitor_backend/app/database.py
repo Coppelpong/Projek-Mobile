@@ -5,27 +5,27 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 # ======================================================
-# MONGODB (untuk data sensor dan user)
+# MONGODB ATLAS
 # ======================================================
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
-client = AsyncIOMotorClient(MONGO_URL)
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI environment variable is missing")
+
+client = AsyncIOMotorClient(MONGODB_URI)
 db = client["lpg_monitor_db"]
 
-# Koleksi MongoDB
 users_collection = db["users"]
 devices_collection = db["devices"]
 readings_collection = db["readings"]
 analytics_collection = db["analytics"]
 
 # ======================================================
-# SQL ALCHEMY (kalau kamu juga pakai relasional)
+# SQL DATABASE
 # ======================================================
-# Kalau tidak pakai, boleh diabaikan bagian ini
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "sqlite:///./lpg_monitor.db"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")  # should be PostgreSQL or MySQL
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -45,5 +45,5 @@ __all__ = [
     "engine",
     "SessionLocal",
     "Base",
-    "get_db"
+    "get_db",
 ]
