@@ -4,14 +4,17 @@ from app.routes import auth, devices
 
 app = FastAPI()
 
-# ⬇️ tambahkan ini (CORS setup)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # atau ganti dengan ["http://localhost:5173"]
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(auth.router)
 app.include_router(devices.router)
+
+# Optional test endpoint
+@app.get("/")
+def home():
+    return {"status": "backend running"}
