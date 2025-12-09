@@ -58,7 +58,7 @@ export default function Login() {
         </button>
       </form>
       <p>
-        Don't have an account? <a href="/register">Register here</a>
+        Don't have an account? <a href="/register"><font color = "blue">Register here</font></a>
       </p>
     </div>
   );
