@@ -33,4 +33,32 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  return (
+    <div className="auth-container">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
+      <p>
+        Don't have an account? <a href="/register">Register here</a>
+      </p>
+    </div>
+  );
 }
