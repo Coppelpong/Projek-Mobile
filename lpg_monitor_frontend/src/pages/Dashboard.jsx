@@ -82,3 +82,7 @@ export default function Dashboard() {
         <button className="logout-btn" onClick={handleLogout}>
           Logout
         </button>
+      </div>
+    </>
+  );
+}
