@@ -1,10 +1,11 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL + "/api";
 
+// GET DEVICES
 export const getDevices = async () => {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Token tidak ditemukan");
 
-  const res = await fetch(`${API_URL}/devices/`, { // ✅ PAKAI SLASH DI AKHIR
+  const res = await fetch(`${API_URL}/devices/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -20,20 +21,19 @@ export const getDevices = async () => {
   return res.json();
 };
 
+// REGISTER DEVICE
 export const registerDevice = async (device) => {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Token tidak ditemukan");
 
-  // Kirim sebagai FormData
   const formData = new FormData();
   formData.append("name", device.name);
   formData.append("location", device.location);
 
-  const res = await fetch("http://127.0.0.1:8000/api/devices/", {
+  const res = await fetch(`${API_URL}/devices/`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      // ⚠️ Jangan tambahkan Content-Type — biar FormData yang atur
     },
     body: formData,
   });
