@@ -3,7 +3,7 @@ import ReadingChart from "../components/ReadingChart";
 import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
-  // Pastikan URL backend benar (tanpa slash di akhir)
+  // Hardcode URL agar aman dari masalah slash
   const API_URL = "https://projek-mobile.onrender.com";
 
   const [devices, setDevices] = useState([]);
@@ -14,8 +14,8 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("⚠️ Token tidak ditemukan. Silakan login kembali.");
-        window.location.href = "/login";
+        // Jangan redirect paksa jika loading pertama, cukup set user kosong/login ulang manual
+        // window.location.href = "/login";
         return;
       }
 
@@ -23,9 +23,15 @@ export default function Dashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail);
+      if (!res.ok) {
+        if (res.status === 401) {
+           localStorage.removeItem("token");
+           window.location.href = "/login";
+        }
+        return;
+      }
 
+      const data = await res.json();
       setDevices(data);
     } catch (err) {
       console.error("Error fetching devices:", err);
@@ -38,12 +44,6 @@ export default function Dashboard() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        alert("⚠️ Token tidak ditemukan.");
-        window.location.href = "/login";
-        return;
-      }
-
       const res = await fetch(`${API_URL}/api/devices/`, {
         method: "POST",
         headers: {
@@ -54,11 +54,11 @@ export default function Dashboard() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail);
+      if (!res.ok) throw new Error(data.detail || "Gagal menambah device");
 
       alert("Device registered!");
       setNewDevice({ name: "", location: "" });
-      fetchDevices(); // Refresh daftar device
+      fetchDevices();
     } catch (err) {
       alert(err.message);
     }
@@ -73,7 +73,7 @@ export default function Dashboard() {
     fetchDevices();
   }, []);
 
-  if (loading) return <p style={{ textAlign: "center", marginTop: "20px" }}>Loading devices...</p>;
+  if (loading) return <p style={{textAlign:"center", padding:"20px"}}>Loading devices...</p>;
 
   return (
     <>
@@ -82,17 +82,16 @@ export default function Dashboard() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
           <h1>LPG Monitor Dashboard</h1>
           <button 
-            className="logout-btn" 
             onClick={handleLogout}
-            style={{ padding: "8px 16px", backgroundColor: "#ff4d4f", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+            style={{ padding: "8px 16px", backgroundColor: "#d9534f", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
           >
             Logout
           </button>
         </div>
 
-        {/* --- FORM REGISTRASI DEVICE BARU --- */}
-        <div className="register-section" style={{ marginBottom: "40px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px", backgroundColor: "#f9f9f9" }}>
-          <h2>Register New Device</h2>
+        {/* FORM REGISTER */}
+        <div style={{ marginBottom: "40px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px", backgroundColor: "#f9f9f9" }}>
+          <h3>Register New Device</h3>
           <form onSubmit={handleRegisterDevice} style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             <input
               type="text"
@@ -110,28 +109,30 @@ export default function Dashboard() {
               required
               style={{ padding: "8px", flex: "1" }}
             />
-            <button type="submit" style={{ padding: "8px 20px", backgroundColor: "#1890ff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+            <button type="submit" style={{ padding: "8px 20px", backgroundColor: "#0275d8", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
               Add Device
             </button>
           </form>
         </div>
 
-        {/* --- DAFTAR DEVICE & CHART --- */}
-        <div className="devices-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
-          {devices.length === 0 ? (
-            <p>Belum ada device. Silakan tambahkan device baru di atas.</p>
-          ) : (
-            devices.map((device) => (
-              <div key={device._id} className="device-card" style={{ border: "1px solid #eee", borderRadius: "8px", padding: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-                <h3 style={{ margin: "0 0 10px 0" }}>{device.name} ({device.location})</h3>
-                <p style={{ fontSize: "12px", color: "#888" }}>ID: {device.device_id}</p>
-                <div style={{ marginTop: "15px", height: "200px" }}>
-                  {/* Komponen Chart dipanggil di sini */}
-                  <ReadingChart deviceId={device.device_id} />
-                </div>
+        {/* LIST DEVICES */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "20px" }}>
+          {devices.map((device) => (
+            <div key={device._id || device.id} style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", boxShadow: "0 2px 5px rgba(0,0,0,0.1)" }}>
+              <h3 style={{ margin: "0 0 5px 0" }}>{device.name}</h3>
+              <p style={{ margin: "0 0 15px 0", color: "#666" }}>Loc: {device.location}</p>
+              
+              {/* MENAMPILKAN ID DEVICE AGAR BISA DICOPY KE ARDUINO */}
+              <div style={{ backgroundColor: "#eee", padding: "8px", borderRadius: "4px", fontSize: "12px", marginBottom: "15px", wordBreak: "break-all" }}>
+                <strong>ID:</strong> {device._id || device.id}
               </div>
-            ))
-          )}
+
+              {/* TAMPILKAN GRAFIK */}
+              <div style={{ height: "200px" }}>
+                <ReadingChart deviceId={device._id || device.id} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>
