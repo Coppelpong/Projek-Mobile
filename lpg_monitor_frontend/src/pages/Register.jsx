@@ -34,7 +34,6 @@ export default function Register() {
     }
   };
 
-  // --- BAGIAN INI YANG HILANG SEBELUMNYA ---
   return (
     <div className="auth-container">
       <h2>Register</h2>
@@ -56,3 +55,23 @@ export default function Register() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" disabled={loading}>
+          {loading ? "Mendaftar..." : "Register"}
+        </button>
+      </form>
+      <p>
+        Sudah punya akun? <a href="/login">Login di sini</a>
+      </p>
+    </div>
+  );
+}
