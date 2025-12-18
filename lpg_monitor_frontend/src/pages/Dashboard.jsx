@@ -3,7 +3,7 @@ import ReadingChart from "../components/ReadingChart";
 import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
-  const API_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_URL = "https://projek-mobile.onrender.com";
 
   const [devices, setDevices] = useState([]);
   const [newDevice, setNewDevice] = useState({ name: "", location: "" });
