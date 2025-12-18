@@ -33,4 +33,26 @@ export default function Register() {
       setLoading(false);
     }
   };
-}
+
+  // --- BAGIAN INI YANG HILANG SEBELUMNYA ---
+  return (
+    <div className="auth-container">
+      <h2>Register</h2>
+      <form onSubmit={handleRegister}>
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
