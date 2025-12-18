@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 export default function Login() {
-  const API_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_URL = "https://projek-mobile.onrender.com";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
