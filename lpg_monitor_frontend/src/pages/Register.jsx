@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 export default function Register() {
-  const API_URL = import.meta.env.VITE_API_BASE_URL;
+  // const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = "https://projek-mobile.onrender.com";
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
